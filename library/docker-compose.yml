@@ -1,0 +1,19 @@
+version: '3.8'
+
+# define all the services for our application
+services:
+  # name our service
+  web:
+    # build the image from the current directory
+    build: .
+
+    # set a custom name for the container
+    container_name: django-app1max
+
+    # map port on the host machine to port in the container
+    ports:
+      - "8000:8000"
+
+    # mount the current directory to app in the container
+    volumes:
+      - .:/app

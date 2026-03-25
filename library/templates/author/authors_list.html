@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="hero">
+        <h1>Authors</h1>
+        <div class="row">
+            <a class="button" href="{% url 'author_create' %}">Create author</a>
+        </div>
+    </section>
+
+    <div class="grid">
+        {% for author in authors %}
+            <article class="card">
+                <h2>{{ author.name }} {{ author.surname }}</h2>
+                <p class="meta">{{ author.patronymic }}</p>
+                <p>
+                    Books:
+                    {% for book in author.books.all %}
+                        {{ book.name }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        no books
+                    {% endfor %}
+                </p>
+                {% if not author.books.count %}
+                    <form method="post" action="{% url 'author_delete' author.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Delete author</button>
+                    </form>
+                {% endif %}
+            </article>
+        {% empty %}
+            <section class="card">
+                <p class="empty">No authors yet.</p>
+            </section>
+        {% endfor %}
+    </div>
+{% endblock %}

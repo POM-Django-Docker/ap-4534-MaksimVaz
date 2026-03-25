@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="hero">
+        <h1>Create author</h1>
+        <form method="post">
+            {% csrf_token %}
+            <label>
+                Name
+                <input type="text" name="name" maxlength="20" required>
+            </label>
+            <label>
+                Surname
+                <input type="text" name="surname" maxlength="20" required>
+            </label>
+            <label>
+                Patronymic
+                <input type="text" name="patronymic" maxlength="20" required>
+            </label>
+            <button type="submit">Create author</button>
+        </form>
+    </section>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="grid">
+        <section class="hero">
+            <h1>Login</h1>
+            <p class="meta">Use your email and password.</p>
+            <form method="post">
+                {% csrf_token %}
+                <label>
+                    Email
+                    <input type="email" name="email" required>
+                </label>
+                <label>
+                    Password
+                    <input type="password" name="password" required>
+                </label>
+                <button type="submit">Login</button>
+            </form>
+        </section>
+    </div>
+{% endblock %}

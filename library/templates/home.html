@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="hero">
+        <h1>Library pages for books, users, orders and authors</h1>
+
+        <div class="row">
+            <a class="button" href="{% url 'books_list' %}">Open books</a>
+            {% if current_user %}
+                {% if current_user.role == 1 %}
+                    <a class="button" href="{% url 'orders_list' %}">Open all orders</a>
+                    <a class="button" href="{% url 'authors_list' %}">Manage authors</a>
+                {% else %}
+                    <a class="button" href="{% url 'my_orders' %}">Open my orders</a>
+                    <a class="button" href="{% url 'order_create' %}">Create order</a>
+                {% endif %}
+            {% else %}
+                <a class="button" href="{% url 'login' %}">Login</a>
+                <a class="button" href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </div>
+    </section>
+
+    <div class="grid">
+        <section class="card">
+            <h2>Auth</h2>
+            <p>Register as librarian or visitor, log in, log out.</p>
+        </section>
+        <section class="card">
+            <h2>Books</h2>
+            <p>View all books, open details, search by title, description or author.</p>
+        </section>
+        <section class="card">
+            <h2>Orders</h2>
+            <p>Visitors can create orders, librarians can review and close them.</p>
+        </section>
+        <section class="card">
+            <h2>Authors</h2>
+            <p>Librarians can add authors and remove them if there are no linked books.</p>
+        </section>
+    </div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="hero">
+        {# I use the same template for create and edit by passing form_title from the view #}
+        <h1>{{ form_title }}</h1>
+        {% if order %}
+            <p class="meta">Book: <strong>{{ order.book.name }}</strong> &mdash; User: <strong>{{ order.user.first_name }} {{ order.user.last_name }}</strong></p>
+        {% else %}
+            <p class="meta">Choose a book and planned return date.</p>
+        {% endif %}
+    </section>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {# I loop through each form field and render it with its label and errors #}
+        {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <p style="color: var(--error); margin: 4px 0 0; font-size: 13px;">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <div class="row">
+            <button type="submit">Save</button>
+            {# I link back to the right page depending on whether we are creating or editing #}
+            {% if order %}
+                <a class="button" href="{% url 'orders_list' %}">Cancel</a>
+            {% else %}
+                <a class="button" href="{% url 'my_orders' %}">Cancel</a>
+            {% endif %}
+        </div>
+    </form>
+{% endblock %}

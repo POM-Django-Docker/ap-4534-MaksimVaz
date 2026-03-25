@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="hero">
+        <h1>{{ page_title }}</h1>
+    </section>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Book</th>
+                    <th>Created</th>
+                    <th>Planned end</th>
+                    <th>Status</th>
+                    {# I show the Action column only to librarians since they manage orders #}
+                    {% if current_user and current_user.role == 1 %}
+                        <th>Action</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.user.first_name }} {{ order.user.last_name }}</td>
+                        <td>{{ order.book.name }}</td>
+                        <td>{{ order.created_at }}</td>
+                        <td>{{ order.plated_end_at }}</td>
+                        <td>{% if order.end_at %}Closed{% else %}Open{% endif %}</td>
+                        {% if current_user and current_user.role == 1 %}
+                            <td>
+                                {% if not order.end_at %}
+                                    {# I put Edit and Close in the same cell to keep the table compact #}
+                                    <div class="row" style="margin-top: 0; gap: 6px;">
+                                        <a class="button" href="{% url 'order_edit' order.id %}">Edit</a>
+                                        <form method="post" action="{% url 'close_order' order.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit">Close</button>
+                                        </form>
+                                    </div>
+                                {% else %}
+                                    Closed at {{ order.end_at }}
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="empty">No orders found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

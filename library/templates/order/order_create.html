@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="hero">
+        <h1>Create order</h1>
+        <p class="meta">Choose a book and planned return date.</p>
+        <form method="post">
+            {% csrf_token %}
+            <label>
+                Book
+                <select name="book_id" required>
+                    <option value="">Select a book</option>
+                    {% for book in books %}
+                        <option value="{{ book.id }}">{{ book.name }} ({{ book.count }} copies)</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>
+                Planned end date
+                <input type="date" name="plated_end_at" required>
+            </label>
+            <button type="submit">Create order</button>
+        </form>
+    </section>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="hero">
+        <h1>Books for {{ profile_user.first_name }} {{ profile_user.last_name }}</h1>
+        <p class="meta">User #{{ profile_user.id }}</p>
+    </section>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Created</th>
+                    <th>Planned end</th>
+                    <th>Closed at</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td><a class="accent" href="{% url 'book_detail' order.book.id %}">{{ order.book.name }}</a></td>
+                        <td>{{ order.created_at }}</td>
+                        <td>{{ order.plated_end_at }}</td>
+                        <td>{{ order.end_at|default:"Open order" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="empty">This user has no orders yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

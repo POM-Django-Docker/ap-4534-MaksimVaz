@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="hero">
+        <h1>User #{{ profile_user.id }}</h1>
+        <p class="meta">{{ profile_user.first_name }} {{ profile_user.middle_name }} {{ profile_user.last_name }}</p>
+    </section>
+
+    <div class="grid">
+        <section class="card">
+            <h2>Profile</h2>
+            <p><strong>Email:</strong> {{ profile_user.email }}</p>
+            <p><strong>Role:</strong> {{ profile_user.get_role_name }}</p>
+            <p><strong>Status:</strong> {% if profile_user.is_active %}active{% else %}inactive{% endif %}</p>
+            <p><strong>Created:</strong> {{ profile_user.created_at }}</p>
+        </section>
+        <section class="card">
+            <h2>Shortcuts</h2>
+            <div class="row">
+                <a class="button" href="{% url 'user_books' profile_user.id %}">Books of this user</a>
+                <a class="button" href="{% url 'users_list' %}">Back to users</a>
+            </div>
+        </section>
+    </div>
+{% endblock %}

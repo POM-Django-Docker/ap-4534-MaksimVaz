@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="grid">
+        <section class="hero">
+            <h1>Register</h1>
+            <p class="meta">Choose who you want to register as.</p>
+            <form method="post">
+                {% csrf_token %}
+                <label>
+                    First name
+                    <input type="text" name="first_name" maxlength="20" required>
+                </label>
+                <label>
+                    Last name
+                    <input type="text" name="last_name" maxlength="20" required>
+                </label>
+                <label>
+                    Middle name
+                    <input type="text" name="middle_name" maxlength="20">
+                </label>
+                <label>
+                    Email
+                    <input type="email" name="email" maxlength="100" required>
+                </label>
+                <label>
+                    Password
+                    <input type="password" name="password" required>
+                </label>
+                <label>
+                    Role
+                    <select name="role">
+                        <option value="0">Visitor</option>
+                        <option value="1">Librarian</option>
+                    </select>
+                </label>
+                <button type="submit">Create account</button>
+            </form>
+        </section>
+    </div>
+{% endblock %}

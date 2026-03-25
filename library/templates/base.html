@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library House</title>
+    <!-- Modern Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #121212;
+            --panel: #1e1e1e;
+            --line: #333333;
+            --text-main: #e0e0e0;
+            --text-muted: #888888;
+            --accent: #4ade80;
+            --accent-hover: #16a34a;
+            --ok: #03dac6;
+            --error: #cf6679;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            color: var(--text-main);
+            background-color: var(--bg);
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Topbar / Navbar */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-main);
+            text-decoration: none !important;
+        }
+
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav a, button, .button {
+            border: 1px solid var(--line);
+            background-color: #2d2d2d;
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            text-decoration: none !important;
+            display: inline-block;
+        }
+
+        .nav a:hover, button:hover, .button:hover {
+            background-color: #3d3d3d;
+            border-color: #555;
+            color: var(--accent);
+        }
+
+        /* Panels and Cards */
+        .hero, .card, .table-wrap, form {
+            background-color: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 25px;
+        }
+
+        .hero {
+            margin-bottom: 25px;
+        }
+
+        h1, h2 {
+            margin-top: 0;
+            color: #ffffff;
+        }
+
+        .grid {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .meta {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .messages {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid var(--line);
+            background-color: #2d2d2d;
+            font-weight: bold;
+        }
+
+        .message.success {
+            color: var(--bg);
+            background-color: var(--ok);
+        }
+
+        .message.error {
+            color: var(--bg);
+            background-color: var(--error);
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Forms */
+        form {
+            display: grid;
+            gap: 15px;
+            max-width: 500px;
+        }
+
+        label {
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid var(--line);
+            background-color: #121212;
+            color: var(--text-main);
+            font-family: inherit;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        th {
+            color: var(--text-muted);
+            background-color: #252525;
+        }
+        
+        tbody tr:hover {
+            background-color: #2d2d2d;
+        }
+
+        .empty {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .accent {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .topbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="topbar">
+            <div>
+                <a class="brand" href="{% url 'home' %}">Library House</a>
+                <div class="meta">
+                    {% if current_user %}
+                        {{ current_user.first_name }} {{ current_user.last_name }} · {{ current_user.get_role_name }}
+                    {% else %}
+                        Welcooooommeeee
+                    {% endif %}
+                </div>
+            </div>
+            <div class="nav">
+                <a href="{% url 'books_list' %}">Books</a>
+                {% if current_user %}
+                    <a href="{% url 'my_orders' %}">My orders</a>
+                    {% if current_user.role == 1 %}
+                        <a href="{% url 'users_list' %}">Users</a>
+                        <a href="{% url 'orders_list' %}">All orders</a>
+                        <a href="{% url 'authors_list' %}">Authors</a>
+                    {% else %}
+                        <a href="{% url 'order_create' %}">Create order</a>
+                    {% endif %}
+                    <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+                    <a href="{% url 'register' %}">Register</a>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

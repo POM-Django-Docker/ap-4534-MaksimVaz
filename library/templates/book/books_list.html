@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="hero">
+        <h1>Books</h1>
+        <p class="meta">Search by title, description or author.</p>
+        <form method="get">
+            <label>
+                Search
+                <input type="text" name="q" value="{{ query }}" placeholder="Try book name or author surname">
+            </label>
+            <button type="submit">Find books</button>
+        </form>
+    </section>
+
+    {# I show the Add book button only to librarians so regular users can't see it #}
+    {% if current_user and current_user.role == 1 %}
+        <div class="row" style="margin-bottom: 20px;">
+            <a class="button" href="{% url 'book_create' %}">+ Add book</a>
+        </div>
+    {% endif %}
+
+    <div class="grid">
+        {% for book in books %}
+            <article class="card">
+                <h2><a class="accent" href="{% url 'book_detail' book.id %}">{{ book.name }}</a></h2>
+                <p>{{ book.description|default:"No description yet." }}</p>
+                <p class="meta">
+                    Authors:
+                    {% for author in book.authors.all %}
+                        {{ author.name }} {{ author.surname }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        no authors
+                    {% endfor %}
+                </p>
+                <p class="meta">Copies: {{ book.count }}</p>
+            </article>
+        {% empty %}
+            <section class="card">
+                <p class="empty">No books found.</p>
+            </section>
+        {% endfor %}
+    </div>
+{% endblock %}
